@@ -1,6 +1,13 @@
+import { computed } from '@angular/core';
 import { Movie, Movies } from './models'; // Importe les types de données Movie et Movies depuis le fichier models
 
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals'; // Importe les fonctions nécessaires de @ngrx/signals
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals'; // Importe les fonctions nécessaires de @ngrx/signals
 
 // Définit l'interface de l'état des films
 export interface MoviesState {
@@ -29,5 +36,22 @@ export const moviesStore = signalStore(
       patchState(store, { items: [...store.items(), item] }); // Ajoute le nouveau film à la liste des films
       patchState(store, { loading: false }); // Modifie l'état pour indiquer que le chargement est terminé
     },
+    updateOne(item: Movie) {
+      patchState(store, { loading: true }); // Modifie l'état pour indiquer que les données sont en cours de chargement
+      const movieToUpdate = store.items().find((movie) => item.id === movie.id);
+      if (movieToUpdate) {
+        //type guard
+        //movieToUpdate?.description = item.description;
+        movieToUpdate.description = item.description;
+        movieToUpdate.title = item.title;
+        //should be bugger 
+        patchState(store, { items: [...store.items(), item] });
+      }
+
+      patchState(store, { loading: false }); // Modifie l'état pour indiquer que le chargement est terminé
+    },
+  })),
+  withComputed((store) => ({
+    empty: computed(() => store.items().length === 0),
   }))
 );

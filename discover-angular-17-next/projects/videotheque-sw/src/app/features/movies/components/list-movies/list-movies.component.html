@@ -1,4 +1,8 @@
-@for(movie of store.items() ; track movie.id){
+<h1>Liste de mes fims préférés</h1>
+
+@if(store.empty()){
+<h1>rien dans votre template</h1>
+} @for(movie of store.items() ; track movie.id){
 <div>
   <h2>{{ movie.title }}</h2>
   <span>{{ movie.description }}</span>
