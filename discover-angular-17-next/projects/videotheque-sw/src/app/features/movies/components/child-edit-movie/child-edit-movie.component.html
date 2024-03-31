@@ -1,4 +1,5 @@
 <form [formGroup]="movieForm" (submit)="saveToParent()">
   <input type="title" formControlName="title" />
   <button>{{ buttonSaveTitle() }}</button>
+  <button (click)="clickToCancel()">annulter</button>
 </form>
